@@ -8,47 +8,30 @@ const countries = {
   		America: ['USA', 'Canada']
   	};
 
-
-  //Обычно Родительский компонент рендерят внизу, вначале ты знакомишься с детьми, где содержится основной код. А потом смотришь на родителя, где дети вызываются
 export default class LocationSelector extends React.Component {
   constructor(props) {
     super(props);
-    // Так нагляднее
-    this.state = {
-      selectedRegion: 'Selector',
-      selectedCountries: '',
-      isCSActive: false
-    };
-
+    this.state = {selectedRegion: 'Selector', selectedCountries: '', isCSActive: false};
+    this.onRegionChange = this.onRegionChange.bind(this);
   }
 
 
-// Если записывать метод так: method = () => {} то не надо в конструкторе делать this.method.bind(this)
-  onRegionChange = (newRegion) => {
-    this.setState ({
-      selectedRegion: newRegion,
-      selectedCountries: countries[newRegion],
-      isCSActive: true
-    });
+
+  onRegionChange(newRegion) {
+    this.setState ({selectedRegion: newRegion, selectedCountries: countries[newRegion], isCSActive: true});
   }
 
   render() {
-    // Никогда не использовал console.dir, прикольно
+
+
   	console.dir(Object.keys(countries));
   	console.dir(this.state.selectedCountries);
-    // Обычно выносят все ключи стейта, чтобы не писать this.state каждый раз. То же относится и к this.props.
-    {selectedRegion, selectedCountries, isCSActive} = this.state;
 
     return(
       <div>
         <p>Hello</p>
-        {/* Если атрибуты не помещаются в одну строку, я их располагаю один под другим */}
-        <RegionSelector
-          regions={Object.keys(countries)}
-          selectedRegion={selectedRegion}
-          onRegionChange={this.onRegionChange}
-        />
-        <CountrySelector selectedCountries={selectedCountries} isActive={isCSActive}/>
+        <RegionSelector regions={Object.keys(countries)} selectedRegion={this.state.selectedRegion} onRegionChange={this.onRegionChange}/>
+        <CountrySelector selectedCountries={this.state.selectedCountries} isActive={this.state.isCSActive}/>
       </div>
     )
   }
@@ -58,9 +41,10 @@ export default class LocationSelector extends React.Component {
 class RegionSelector extends React.Component {
   constructor(props) {
     super(props);
+    this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange = (e) => {
+  handleChange(e) {
     this.props.onRegionChange(e.target.value);
   }
 
