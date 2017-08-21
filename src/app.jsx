@@ -1,103 +1,49 @@
 import React from 'react';
 import '../styles/index.scss';
 
-const countries = {
+const regionsAndCountries = {
   		Europe: ['Italy', 'German', 'Ukraine'],
   		Asia: ['Japan', 'China', 'India'],
   		Africa: ['Nepal', 'Egypt', 'Sudan'],
   		America: ['USA', 'Canada']
   	};
 
-export default class LocationSelector extends React.Component {
+export default class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {selectedRegion: 'Selector', selectedCountries: '', isCSActive: false};
-    this.onRegionChange = this.onRegionChange.bind(this);
+    this.state = {
+      selectedRegion: undefined,
+    };
   }
-  
-  
 
-  onRegionChange(newRegion) {	
-    this.setState ({selectedRegion: newRegion, selectedCountries: countries[newRegion], isCSActive: true});
+  onSelectChange = (event) => {
+    this.setState({ selectedRegion: event.target.value });
   }
-  
-  render() {  	
 
-  	
-  	console.dir(Object.keys(countries));
-  	console.dir(this.state.selectedCountries);
-
-    return(
-      <div>
-        <p>Hello</p>
-        <RegionSelector regions={Object.keys(countries)} selectedRegion={this.state.selectedRegion} onRegionChange={this.onRegionChange}/>
-        <CountrySelector selectedCountries={this.state.selectedCountries} isActive={this.state.isCSActive}/>
-      </div>
-    )
-  }
-}
-
-
-class RegionSelector extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
-  }
-  
-  handleChange(e) {
-    this.props.onRegionChange(e.target.value);
-  }
-  
   render() {
+    const { selectedRegion } = this.state;
 
-  	var regions = [];
-  	this.props.regions.forEach(function(region) {regions.push(<option value={region}>{region}</option>)});
-  	
     return (
-    	<div>
-	      <label>
-	        Select your region:
-	        <br/>
-	        <select value={this.props.selectedRegion} onChange={this.handleChange}>
-	          <option value='Selector' disabled>Select here</option>
-	          {regions}
-	        </select>
-	      </label>
+      <div>
+        <select defaultValue onChange={this.onSelectChange}>
+          <option value disabled> -- select region -- </option>
+          {Object.keys(regionsAndCountries).map( (region, index) =>
+               <option value={region} key={region}>
+                 {region}
+               </option>
+            )
+          }
+        </select>
+        <select defaultValue disabled={!selectedRegion}>
+          <option value disabled> -- select country -- </option>
+          {selectedRegion && regionsAndCountries[selectedRegion].map( (country, index) =>
+              <option value={country} key={country}>
+                {country}
+              </option>
+            )
+          }
+        </select>
       </div>
     )
   }
 }
-
-class CountrySelector extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {value: 'Selector'};
-    this.handleChange = this.handleChange.bind(this);
-  }
-  
-  handleChange(e) {
-    this.setState({value: e.target.value});
-  }
-  
-  render() { 
-
-  	var countries = []; 
-  	if (this.props.isActive) {			
-			this.props.selectedCountries.forEach(function(country) {countries.push(<option value={country}>{country}</option>)});
-		} 
-
-  	return(
-  		<div>
-  		<label>
-        Select your country:
-        <br/>
-        <select value={this.state.value} onChange={this.handleChange} disabled={!this.props.isActive}>
-          <option value='Selector' disabled>Select here</option>
-          {countries}
-        </select>
-      </label>
-      </div>
-  		)      
-  }
-}
-
