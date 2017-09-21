@@ -2,7 +2,7 @@ import React from 'react';
 import '../styles/index.scss';
 
 const countries = {
-  		Europe: ['Italy', 'German', 'Ukraine'],
+  		Europe: ['Italy', 'Sweden', 'Ukraine'],
   		Asia: ['Japan', 'China', 'India'],
   		Africa: ['Nepal', 'Egypt', 'Sudan'],
   		America: ['USA', 'Canada']
